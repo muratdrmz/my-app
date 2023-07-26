@@ -106,6 +106,7 @@ const RightMenu = styled.div`
 
 const CustomMenu = styled(MenuOpen)`
   cursor: pointer;
+  
 `;
 
 const BurgerNav=styled.div`
