@@ -1,9 +1,15 @@
-import React from 'react'
+import React, {useState} from 'react'
 import styled from "styled-components"
 import { MenuOpen } from "@mui/icons-material";
-
+import CloseIcon from "@mui/icons-material/Close";
+import {selectCars} from "../features/car/carSlice";
+import {useSelector} from "react-redux";
 
 function Header() {
+  const [burgerStatus,setBurgerStatus]=useState(false)
+  const cars=useSelector(selectCars)
+  console.log(cars);
+
   return (
     <Container>
       <a>
@@ -11,44 +17,42 @@ function Header() {
       </a>
 
       <Menu>
-        <a href="#">Model S</a>
-        <a href="#">Model 3</a>
-        <a href="#">Model X</a>
-        <a href="#">Model Y</a>
+        {cars &&
+          cars.map((car, index) => (
+            <a key={index} href="#">
+              {car}
+            </a>
+          ))}
       </Menu>
       <RightMenu>
         <a href="#">Shop</a>
         <a href="#">Tesla Account</a>
-        <CustomMenu />
+        <CustomMenu onClick={() => setBurgerStatus(true)} />
       </RightMenu>
-      <BurgerNav>
+      <BurgerNav show={burgerStatus}>
+        <CloseWrapper>
+          <CustomClose onClick={() => setBurgerStatus(false)} />
+        </CloseWrapper>
+        {cars &&
+          cars.map((car, index) => (
+            <li key={index}>
+              <a href="#">{car}</a>
+            </li>
+          ))}
         <li>
           <a href="#">Existing Inventory</a>
         </li>
-
-        <li>
-          <a href="#">Used Inventory</a>
-        </li>
-        <li>
-          <a href="#">Traide-in</a>
-        </li>
-        <li>
-          <a href="#">Cybertruck</a>
-        </li>
-        <li>
-          <a href="#">Roadster</a>
-        </li>
-        <li>
-          <a href="#">Roadster</a>
-        </li>
-        <li>
-          <a href="#">Existing Inventory</a>
-        </li>
-        <li>    
-            <a href="#">Existing Inventory</a>
+          <li>
+            <a href="#">Used Inventory</a>
           </li>
           <li>
-          <a href="#">Existing Inventory</a>
+            <a href="#">Trade-in</a>
+          </li>
+          <li>
+            <a href="#">Cybertruck</a>
+          </li>
+          <li>
+          <a href="#">Roadaster</a>
         </li>
       </BurgerNav>
     </Container>
@@ -117,6 +121,8 @@ const BurgerNav=styled.div`
   display:flex;
   flex-direction:column;
   text-align:start;
+  transform:${props =>props.show ? 'translateX(0)':'translateX(100%)'};
+  transition:transform 0.3s;
   li{
     padding:15px 0;
     border-bottom:1px solid rgba(0,0,0,.2);
@@ -124,5 +130,15 @@ const BurgerNav=styled.div`
       font-weight:600;
     }
   }
+opacity:0.9;
+`
+const CustomClose=styled(CloseIcon)`
+  cursor:pointer;
+`
+
+const CloseWrapper=styled.div`
+  display:flex;
+  justify-content:flex-end;
 
 `
+
